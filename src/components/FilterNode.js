@@ -12,8 +12,9 @@ const FilterNode = ({ id, data }) => {
 
   useEffect(() => {
     if (data.csvData && data.csvData.length > 0) {
+      
       console.log('Data received:', data.csvData);
-      setColumns(Object.keys(data.csvData[0]));
+      setColumns(data.csvData[0]);
     }
   }, [data.csvData]);
 
@@ -26,13 +27,13 @@ const FilterNode = ({ id, data }) => {
       const filteredData = data.csvData.filter(row => {
         switch (condition) {
           case 'equals':
-            return row[column] === value;
+            return row[columns.indexOf(column)] === value;
           case 'not_equals':
-            return row[column] !== value;
+            return row[columns.indexOf(column)] !== value;
           case 'includes':
-            return row[column].includes(value);
+            return row[columns.indexOf(column)].includes(value);
           case 'not_includes':
-            return !row[column].includes(value);
+            return !row[columns.indexOf(column)].includes(value);
           default:
             return true;
         }
@@ -54,9 +55,10 @@ const FilterNode = ({ id, data }) => {
         <label>Column: </label>
         <select value={column} onChange={handleColumnChange}>
           <option value="" disabled>Select a column</option>
-          {columns.map((col) => (
-            <option key={col} value={col}>{col}</option>
-          ))}
+          {columns.map((col) => {
+            console.log(col)
+              return <option key={col} value={col}>{col}</option>
+          })}
         </select>
       </div>
       <div>
