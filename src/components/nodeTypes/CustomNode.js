@@ -13,7 +13,6 @@ const CustomNode = ({ id, data }) => {
   };
 
   return (
-    
     <div className='relative px-2 py-2 shadow-md shadow-[#1e1e1e] h-24 rounded-md' >
       <div>
         <div className='flex items-center justify-end'>
@@ -46,7 +45,7 @@ const CustomNode = ({ id, data }) => {
         </>
       )} 
       </div>
-      <Handle type="source" position={Position.Right}   style={{ backgroundColor: '#0064fe', width: '12px', height: '14%', marginLeft:'6px'}}/>
+      <Handle type="source" position={Position.Right} style={{ backgroundColor: '#0064fe', width: '12px', height: '14%', marginLeft:'6px'}}/>
     </div>
   );
 };

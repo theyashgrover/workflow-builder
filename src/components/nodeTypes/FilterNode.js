@@ -4,7 +4,6 @@ import { IoClose } from 'react-icons/io5';
 
 const FilterNode = ({ id, data }) => {
 
-
   const [column, setColumn] = useState('');
   const [condition, setCondition] = useState('equals');
   const [value, setValue] = useState('');
@@ -22,6 +21,8 @@ const FilterNode = ({ id, data }) => {
   const handleConditionChange = (event) => setCondition(event.target.value);
   const handleValueChange = (event) => setValue(event.target.value);
 
+  // This function holds the filter functionality based on 
+  // the selected condition and value.
   const applyFilter = () => {
     if (data.csvData) {
       const filteredData = data.csvData.filter(row => {
@@ -38,21 +39,22 @@ const FilterNode = ({ id, data }) => {
             return true;
         }
       });
-      data.handleUpdateNodeData(id, filteredData);
+      data.handleUpdateNodeData(id, [data.csvData[0],...filteredData]);
     }
   };
 
   return (
-    <div style={{ position: 'relative', padding: 10, border: '1px solid #ddd', borderRadius: 5 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>Filter Node</div>
+    
+    <div className='relative px-4 py-3 shadow-sm bg-[#ffffff] shadow-[#1e1e1e] rounded-md '>
+      <div className='flex items-center justify-between my-2'>
+        <div className='text-xl font-bold'>Filter Node</div>
         <IoClose 
-          style={{ cursor: 'pointer' }} 
+         className='cursor-pointer text-red-500'
           onClick={() => data.handleDeleteNode(id)} 
         />
       </div>
       <div>
-        <label>Column: </label>
+        <label className='font-semibold'>Column: </label>
         <select value={column} onChange={handleColumnChange}>
           <option value="" disabled>Select a column</option>
           {columns.map((col) => {
@@ -62,8 +64,8 @@ const FilterNode = ({ id, data }) => {
         </select>
       </div>
       <div>
-        <label>Condition: </label>
-        <select value={condition} onChange={handleConditionChange}>
+        <label className='font-semibold'>Condition: </label>
+        <select value={condition} onChange={handleConditionChange} className='py-2'>
           <option value="equals">Equals</option>
           <option value="not_equals">Not Equals</option>
           <option value="includes">Includes</option>
@@ -71,12 +73,12 @@ const FilterNode = ({ id, data }) => {
         </select>
       </div>
       <div>
-        <label>Value: </label>
-        <input type="text" value={value} onChange={handleValueChange} />
+        <label className='font-semibold'>Value: </label>
+        <input type="text" value={value} className='hover:border-2 border-[#1e1e1e]' onChange={handleValueChange} />
       </div>
-      <button onClick={applyFilter}>Apply Filter</button>
-      <Handle type="target" position={Position.Left} />
-      <Handle type="source" position={Position.Right} />
+      <button className='py-2 px-3 font-bold text-white bg-green-500 rounded-md mt-4 hover:bg-green-700 hover:scale-105 ease-in-out duration-150' onClick={applyFilter}>Apply Filter</button>
+      <Handle type="target" position={Position.Left} style={{ backgroundColor: '#08E359', width: '12px', height: '12px',}} />
+      <Handle type="source" position={Position.Right} style={{ backgroundColor: '#08E359', width: '12px', height: '12px',}}  />
     </div>
   );
 };
