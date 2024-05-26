@@ -23,10 +23,10 @@ const WorkflowCanvas = () => {
   const [localStateForAddNodes, setLocalStateForAddNodes] = useState(false);
   const [activeNodeId, setActiveNodeId] = useState(null);
 
-  useEffect(() => {
-    setNodes(workflow.nodes);
-    setEdges(workflow.edges);
-  }, [workflow.nodes, workflow.edges]);
+  // useEffect(() => {
+  //   setNodes(workflow.nodes);
+  //   setEdges(workflow.edges);
+  // }, [workflow.nodes, workflow.edges]);
 
   const onConnect = useCallback((params) => {
     console.log("onConnect called with params:", params); // Debugging log
@@ -39,8 +39,12 @@ const WorkflowCanvas = () => {
     if (sourceNode && targetNode) { // Check if both nodes exist
       console.log("reached checkpoint 2");
       if (sourceNode.type === 'input' && targetNode.type === 'filter' && sourceNode.data.csvData) {
-        targetNode.data.handleUpdateNodeData(targetNode.id, sourceNode.data.csvData);
-        console.log("reached checkpoint 3");
+        try{
+          console.log("reached checkpoint 3" , nodes);
+          handleUpdateNodeData(targetNode.id, sourceNode.data.csvData)
+        }catch(err){
+          console.log(err)
+        }
       } else {
         // Optional: Handle invalid connections (e.g., console warning)
         console.warn('Invalid connection: Only input to filter allowed.');
@@ -56,8 +60,10 @@ const WorkflowCanvas = () => {
   };
 
   const handleAddNode = (type) => {
+   try{
+    let uuid=uuidv4();
     const newNode = {
-      id: uuidv4(),
+      id: uuid,
       type,
       position: { x: 250, y: 5 },
       data: {
@@ -69,8 +75,11 @@ const WorkflowCanvas = () => {
         handleClick : () => handleNodeClick(id)
       },
     };
-    setNodes((nds) => nds.concat(newNode));
+    setNodes(old=>[...old, newNode]);
     dispatch(addNode({ workflowId: id, node: newNode }));
+   }catch(err){
+    console.log(err)
+   }
   };
 
   const handleDeleteNode = (nodeId) => {
@@ -130,7 +139,7 @@ const WorkflowCanvas = () => {
             csvData: results.data,
           };
           setEntireInputData((prevData) => [...prevData, inputDataObj]);
-          console.log(entireInputData);
+          // console.log(entireInputData);
         },
       });
     }
@@ -138,19 +147,21 @@ const WorkflowCanvas = () => {
   
 
   const handleUpdateNodeData = (nodeId, newData) => {
+    console.log("inside update", nodes)
     const updatedNodes = nodes.map((node) => {
       if (node.id === nodeId) {
-        return {
+        node={
           ...node,
           data: {
             ...node.data,
             csvData: newData,
           },
-        };
+        }
       }
       return node;
     });
     setNodes(updatedNodes);
+    setResultData(newData)
     dispatch(updateWorkflow({ id, nodes: updatedNodes, edges }));
   };
 
@@ -158,8 +169,8 @@ const WorkflowCanvas = () => {
     console.log(`The default node id as params is ${nodeId}`)
     const clickedNodeData = entireInputData.find((data) => data.nodeId === nodeId);
     if (clickedNodeData) {
-      setResultData(clickedNodeData.csvData);
-      console.log("The result data is : " + resultData);
+      // setResultData(clickedNodeData.csvData);
+      // console.log("The result data is : " + resultData);
     } else {
       setResultData(null);
     }
