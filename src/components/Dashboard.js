@@ -23,7 +23,7 @@ const Dashboard = () => {
   return (
     <div>
       <div className='flex justify-between items-center mb-12 shadow-md py-6'>
-        <div className='text-2xl font-semibold text-clip ml-6 text-[#1e1e1e]'>DhiWise Assignment</div>
+        <div className='text-2xl font-semibold text-clip ml-6 text-[#1e1e1e]'>NYG Workflow Builder</div>
         <div className='flex items-center'>
           <a target='_blank' href='https://granite-shaker-22b.notion.site/My-DhiWise-Assignment-Implementation-How-It-Works-56d6c08aab884faa9697da3d9a6bfb7c'>
           <div className='text-[#1e1e1e] font-medium px-6 cursor-pointer hover:scale-105 ease-in-out duration-100 hover:underline'>How it works?</div>
